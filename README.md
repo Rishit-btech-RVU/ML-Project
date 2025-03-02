@@ -1,41 +1,45 @@
+# Food Spoilage Detection System
 
+A smart system to detect and monitor food spoilage using computer vision and machine learning techniques.
 
-# **Food Spoilage Detection System**  
-A smart AI-powered system that detects and monitors food spoilage using computer vision and machine learning.  
+## Overview
 
-## **Overview**  
-Food waste is a major global issue, and early detection of spoilage can help minimize losses. This project leverages image analysis techniques to identify visual signs of food spoilage across different food categories, providing timely alerts to users.  
+This project aims to help reduce food waste by detecting early signs of food spoilage through image analysis. The system can identify visual indicators of spoilage in various food items and provide timely alerts.
 
-## **Key Features**  
-✅ **Real-time spoilage detection** using AI-powered image analysis  
-✅ **Multi-category food support** for various perishable items  
-✅ **Visual condition assessment** to track freshness levels  
-✅ **Spoilage probability estimation** for predictive insights  
-✅ **Early warning notifications** to prevent food wastage  
+## Features
 
-## **Setup & Installation**  
-1. **Clone the repository**  
-2. **Install dependencies:**  
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Configure environment variables**  
-4. **Run the application**  
+- Real-time food spoilage detection
+- Support for multiple food categories
+- Visual analysis of food condition
+- Spoilage probability assessment
+- Early warning system for food items approaching spoilage
 
-## **Usage**  
-1. Place food items in front of the camera.  
-2. Start the detection system:  
-   ```bash
-   python detect_spoilage.py
-   ```  
-3. View real-time results and spoilage probability in the output window.  
+## Setup
 
-## **System Requirements**  
-- Python 3.7+  
-- TensorFlow  
-- NumPy  
-- Matplotlib  
+1. Clone the repository
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+3. Configure your environment variables
+4. Run the application
 
-## **Contributing**  
-We welcome contributions! Feel free to submit a **Pull Request** or report issues to improve the system.  
+## Usage
 
+1. Place food items in front of the camera
+2. Run the detection system:
+```bash
+python detect_spoilage.py
+```
+3. View results in the output window
+
+## Requirements
+
+- Python 3.7+
+- TensorFlow
+- NumPy
+- Matplotlib
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.

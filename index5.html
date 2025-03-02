@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Spoilage Detection</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .result {
+            color: #333;
+            font-size: 18px;
+        }
+        .result p {
+            margin: 10px 0;
+        }
+        .result .yes {
+            color: #dc3545; /* Red */
+            font-weight: bold;
+        }
+        .result .no {
+            color: #28a745; /* Green */
+            font-weight: bold;
+        }
+        #imagePreview {
+            margin-top: 20px;
+            max-width: 200px; /* Limit the width of the image preview */
+            max-height: 150px; /* Limit the height of the image preview */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            object-fit: cover; /* Ensure the image fits within the bounds */
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+    <h1>Food Spoilage Detection</h1>
+    <form id="uploadForm">
+        <input type="file" id="foodImage" accept="image/*" required>
+        <button type="submit">Check Spoilage</button>
+    </form>
+    <img id="imagePreview" src="" alt="Image Preview">
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('foodImage').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';  // Show the image preview
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('imagePreview').style.display = 'none';  // Hide the image preview
+            }
+        });
+
+        function convertBoldSyntax(text) {
+            // Convert text with '**text**' to '<strong>text</strong>'
+            return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                       .replace(/\* (.*?)\n/g, '$1<br>');  // Remove leading '*' and convert list items to new lines
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('foodImage');
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json();
+                console.log(result);  // Log the result for debugging
+
+                const resultDiv = document.getElementById('result');
+                if (result.error) {
+                    resultDiv.innerHTML = `<p class="error">Error: ${result.error}</p>`;
+                } else {
+                    const answerClass = result.answer.toUpperCase() === 'YES' ? 'yes' : 'no';
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <p>Is the food spoilt? <span class="${answerClass}">${convertBoldSyntax(result.answer)}</span></p>
+                            <p>Reasoning: ${convertBoldSyntax(result.reasoning)}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = `<p class="error">Failed to process the image.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
